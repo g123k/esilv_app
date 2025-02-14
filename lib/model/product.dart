@@ -17,25 +17,24 @@ class Product {
   final NutritionFacts? nutritionFacts;
   final bool? ingredientsFromPalmOil;
 
-  Product({
-  required this.barcode,
-  this.name,
-  this.altName,
-  this.picture,
-  this.quantity,
-  this.brands,
-  this.manufacturingCountries,
-  this.nutriScore,
-  this.novaScore,
-  this.ecoScore,
-  this.ingredients,
-  this.traces,
-  this.allergens,
-  this.additives,
-  this.nutrientLevels,
-  this.nutritionFacts,
-  this.ingredientsFromPalmOil},
-);
+  Product(
+      {required this.barcode,
+      this.name,
+      this.altName,
+      this.picture,
+      this.quantity,
+      this.brands,
+      this.manufacturingCountries,
+      this.nutriScore,
+      this.novaScore,
+      this.ecoScore,
+      this.ingredients,
+      this.traces,
+      this.allergens,
+      this.additives,
+      this.nutrientLevels,
+      this.nutritionFacts,
+      this.ingredientsFromPalmOil});
 }
 
 class NutritionFacts {
@@ -53,16 +52,16 @@ class NutritionFacts {
 
   NutritionFacts(
       {required this.servingSize,
-        this.calories,
-        this.fat,
-        this.saturatedFat,
-        this.carbohydrate,
-        this.sugar,
-        this.fiber,
-        this.proteins,
-        this.sodium,
-        this.salt,
-        this.energy});
+      this.calories,
+      this.fat,
+      this.saturatedFat,
+      this.carbohydrate,
+      this.sugar,
+      this.fiber,
+      this.proteins,
+      this.sodium,
+      this.salt,
+      this.energy});
 }
 
 class Nutriment {
