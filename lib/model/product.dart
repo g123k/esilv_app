@@ -86,3 +86,75 @@ enum ProductNutriscore { A, B, C, D, E }
 enum ProductNovaScore { Group1, Group2, Group3, Group4 }
 
 enum ProductEcoScore { A, B, C, D, E }
+
+Product generateProduct() => Product(
+      barcode: '1234567890',
+      name: 'Nutella',
+      altName: 'Product Alt Name',
+      picture:
+          'https://images.openfoodfacts.org/images/products/301/762/042/5035/front_fr.533.400.jpg',
+      quantity: '200g',
+      brands: ['Brand 1', 'Brand 2'],
+      manufacturingCountries: ['Country 1', 'Country 2'],
+      nutriScore: ProductNutriscore.B,
+      novaScore: ProductNovaScore.Group4,
+      ecoScore: ProductEcoScore.D,
+      ingredients: ['Ingredient 1', 'Ingredient 2'],
+      traces: ['Trace 1', 'Trace 2'],
+      allergens: ['Allergen 1', 'Allergen 2'],
+      additives: {'Additive 1': 'Additive 1 Description'},
+      nutrientLevels: NutrientLevels(
+        salt: 'Low',
+        saturatedFat: 'Low',
+        sugars: 'Low',
+        fat: 'Low',
+      ),
+      nutritionFacts: NutritionFacts(
+        servingSize: '100g',
+        calories: Nutriment(
+          unit: 'kcal',
+          perServing: 100,
+          per100g: 100,
+        ),
+        fat: Nutriment(
+          unit: 'g',
+          perServing: 10,
+          per100g: 10,
+        ),
+        saturatedFat: Nutriment(
+          unit: 'g',
+          perServing: 5,
+          per100g: 5,
+        ),
+        carbohydrate: Nutriment(
+          unit: 'g',
+          perServing: 20,
+          per100g: 20,
+        ),
+        sugar: Nutriment(
+          unit: 'g',
+          perServing: 10,
+          per100g: 10,
+        ),
+        fiber: Nutriment(
+          unit: 'g',
+          perServing: 5,
+          per100g: 5,
+        ),
+        proteins: Nutriment(
+          unit: 'g',
+          perServing: 10,
+          per100g: 10,
+        ),
+        sodium: Nutriment(
+          unit: 'mg',
+          perServing: 100,
+          per100g: 100,
+        ),
+        salt: Nutriment(
+          unit: 'g',
+          perServing: 0.1,
+          per100g: 0.1,
+        ),
+      ),
+    );
