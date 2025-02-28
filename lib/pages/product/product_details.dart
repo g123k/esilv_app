@@ -1,13 +1,79 @@
 import 'package:esilv_dart/pages/product/tabs/product_tab0.dart';
+import 'package:esilv_dart/pages/product/tabs/product_tab1.dart';
+import 'package:esilv_dart/pages/product/tabs/product_tab2.dart';
+import 'package:esilv_dart/pages/product/tabs/product_tab3.dart';
 import 'package:flutter/material.dart';
 
-class ProductDetails extends StatelessWidget {
+import '../../res/app_icons.dart';
+
+class ProductDetails extends StatefulWidget {
   const ProductDetails({super.key});
+
+  @override
+  State<ProductDetails> createState() => _ProductDetailsState();
+}
+
+class _ProductDetailsState extends State<ProductDetails> {
+  ProductDetailsCurrentTab tab = ProductDetailsCurrentTab.summary;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ProductPageTab0(),
+      body: Stack(
+        children: [
+          Offstage(
+            offstage: tab != ProductDetailsCurrentTab.summary,
+            child: ProductPageTab0(),
+          ),
+          Offstage(
+            offstage: tab != ProductDetailsCurrentTab.info,
+            child: ProductPageTab1(),
+          ),
+          Offstage(
+            offstage: tab != ProductDetailsCurrentTab.nutrition,
+            child: ProductPageTab2(),
+          ),
+          Offstage(
+            offstage: tab != ProductDetailsCurrentTab.nutritionalValues,
+            child: ProductPageTab3(),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: tab.index,
+        onTap: (int position) {
+          tab = ProductDetailsCurrentTab.values[position];
+          setState(() {});
+        },
+        items: ProductDetailsCurrentTab.values
+            .map(
+              (tab) => BottomNavigationBarItem(
+                icon: switch (tab) {
+                  ProductDetailsCurrentTab.summary =>
+                    Icon(AppIcons.tab_barcode),
+                  ProductDetailsCurrentTab.info => Icon(AppIcons.tab_fridge),
+                  ProductDetailsCurrentTab.nutrition =>
+                    Icon(AppIcons.tab_nutrition),
+                  ProductDetailsCurrentTab.nutritionalValues =>
+                    Icon(AppIcons.tab_array),
+                },
+                label: switch (tab) {
+                  ProductDetailsCurrentTab.summary => 'Fiche',
+                  ProductDetailsCurrentTab.info => 'Caractéristiques',
+                  ProductDetailsCurrentTab.nutrition => 'Nutrition',
+                  ProductDetailsCurrentTab.nutritionalValues => 'Tableau',
+                },
+              ),
+            )
+            .toList(growable: false),
+      ),
     );
   }
+}
+
+enum ProductDetailsCurrentTab {
+  summary,
+  info,
+  nutrition,
+  nutritionalValues,
 }
