@@ -3,6 +3,8 @@ import 'package:esilv_dart/res/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../product/product_details.dart';
+
 class ListPage extends StatelessWidget {
   const ListPage({super.key});
 
@@ -40,7 +42,13 @@ class ListPage extends StatelessWidget {
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(22.0))),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const ProductDetails(),
+                  ),
+                );
+              },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

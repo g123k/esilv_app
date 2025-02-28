@@ -1,4 +1,4 @@
-import 'package:esilv_dart/pages/product/product_details.dart';
+import 'package:esilv_dart/pages/list/list_page.dart';
 import 'package:esilv_dart/res/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
           indicatorColor: AppColors.blue,
         ),
       ),
-      home: ProductDetails(),
+      home: ListPage(),
     );
   }
 }
