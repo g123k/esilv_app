@@ -10,12 +10,16 @@ void main() {
 
 final GoRouter _router = GoRouter(
   routes: [
-    GoRoute(path: '/', builder: (_, __) => ListPage(), routes: [
-      GoRoute(
-        path: 'details',
-        builder: (_, __) => ProductDetails(),
-      ),
-    ]),
+    GoRoute(
+      path: '/',
+      builder: (_, __) => ListPage(),
+      routes: [
+        GoRoute(
+          path: 'details',
+          builder: (_, __) => ProductDetails(),
+        ),
+      ],
+    ),
   ],
 );
 

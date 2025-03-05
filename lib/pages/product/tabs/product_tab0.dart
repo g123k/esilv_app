@@ -1,7 +1,9 @@
 import 'package:esilv_dart/model/product.dart';
+import 'package:esilv_dart/pages/demo_bloc.dart';
 import 'package:esilv_dart/res/app_colors.dart';
 import 'package:esilv_dart/res/app_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductPageTab0 extends StatefulWidget {
   static const double kImageHeight = 300.0;
@@ -36,42 +38,45 @@ class _ProductPageTab0State extends State<ProductPageTab0> {
     final ScrollController scrollController =
         PrimaryScrollController.of(context);
 
-    return _ProductProvider(
-      product: generateProduct(),
-      child: NotificationListener<ScrollNotification>(
-        onNotification: (ScrollNotification notification) {
-          _onScroll();
-          return false;
-        },
-        child: SizedBox.expand(
-          child: Stack(
-            children: [
-              Image.network(
-                'http://',
-                width: double.infinity,
-                height: ProductPageTab0.kImageHeight,
-                cacheHeight: (ProductPageTab0.kImageHeight * 3).toInt(),
-                fit: BoxFit.cover,
-                color: Colors.black.withValues(alpha: _currentScrollProgress),
-                colorBlendMode: BlendMode.srcATop,
-              ),
-              Positioned.fill(
-                child: SingleChildScrollView(
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification notification) {
+        _onScroll();
+        return false;
+      },
+      child: SizedBox.expand(
+        child: Stack(
+          children: [
+            BlocBuilder<ProductBloc, ProductBlocState>(
+              buildWhen: (oldState, newState) =>
+                  oldState.product?.picture != newState.product?.picture,
+              builder: (_, ProductBlocState state) {
+                return Image.network(
+                  state.product!.picture!,
+                  width: double.infinity,
+                  height: ProductPageTab0.kImageHeight,
+                  cacheHeight: (ProductPageTab0.kImageHeight * 3).toInt(),
+                  fit: BoxFit.cover,
+                  color: Colors.black.withValues(alpha: _currentScrollProgress),
+                  colorBlendMode: BlendMode.srcATop,
+                );
+              },
+            ),
+            Positioned.fill(
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Scrollbar(
                   controller: scrollController,
-                  child: Scrollbar(
-                    controller: scrollController,
-                    trackVisibility: true,
-                    child: Container(
-                      margin: const EdgeInsetsDirectional.only(
-                        top: ProductPageTab0.kImageHeight - 30.0,
-                      ),
-                      child: const _Body(),
+                  trackVisibility: true,
+                  child: Container(
+                    margin: const EdgeInsetsDirectional.only(
+                      top: ProductPageTab0.kImageHeight - 30.0,
                     ),
+                    child: const _Body(),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -194,22 +199,28 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    final Product product = _ProductProvider.of(context).product;
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          product.name!,
-          style: textTheme.displayLarge,
+        BlocBuilder<ProductBloc, ProductBlocState>(
+          builder: (_, ProductBlocState state) {
+            return Text(
+              state.product!.name ?? '-',
+              style: textTheme.displayLarge,
+            );
+          },
         ),
         const SizedBox(
           height: 3.0,
         ),
-        Text(
-          product.brands?.join(',') ?? '-',
-          style: textTheme.displayMedium,
+        BlocBuilder<ProductBloc, ProductBlocState>(
+          builder: (_, ProductBlocState state) {
+            return Text(
+              state.product!.brands?.join(',') ?? '-',
+              style: textTheme.headlineMedium,
+            );
+          },
         ),
         const SizedBox(
           height: 8.0,
@@ -589,7 +600,7 @@ class _ProductProvider extends InheritedWidget {
     required super.child,
   });
 
-  final Product product;
+  final Product? product;
 
   static _ProductProvider of(BuildContext context) {
     final _ProductProvider? result =
