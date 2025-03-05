@@ -2,8 +2,7 @@ import 'package:esilv_dart/res/app_colors.dart';
 import 'package:esilv_dart/res/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../product/product_details.dart';
+import 'package:go_router/go_router.dart';
 
 class ListPage extends StatelessWidget {
   const ListPage({super.key});
@@ -43,11 +42,7 @@ class ListPage extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(22.0))),
               ),
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const ProductDetails(),
-                  ),
-                );
+                GoRouter.of(context).push('/details');
               },
               child: Row(
                 mainAxisSize: MainAxisSize.min,

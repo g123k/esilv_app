@@ -1,10 +1,23 @@
 import 'package:esilv_dart/pages/list/list_page.dart';
+import 'package:esilv_dart/pages/product/product_details.dart';
 import 'package:esilv_dart/res/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+final GoRouter _router = GoRouter(
+  routes: [
+    GoRoute(path: '/', builder: (_, __) => ListPage(), routes: [
+      GoRoute(
+        path: 'details',
+        builder: (_, __) => ProductDetails(),
+      ),
+    ]),
+  ],
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -12,7 +25,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -67,7 +80,7 @@ class MyApp extends StatelessWidget {
           indicatorColor: AppColors.blue,
         ),
       ),
-      home: ListPage(),
+      routerConfig: _router,
     );
   }
 }
