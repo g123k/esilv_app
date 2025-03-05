@@ -36,39 +36,42 @@ class _ProductPageTab0State extends State<ProductPageTab0> {
     final ScrollController scrollController =
         PrimaryScrollController.of(context);
 
-    return NotificationListener<ScrollNotification>(
-      onNotification: (ScrollNotification notification) {
-        _onScroll();
-        return false;
-      },
-      child: SizedBox.expand(
-        child: Stack(
-          children: [
-            Image.network(
-              'https://images.unsplash.com/photo-1482049016688-2d3e1b311543',
-              width: double.infinity,
-              height: ProductPageTab0.kImageHeight,
-              cacheHeight: (ProductPageTab0.kImageHeight * 3).toInt(),
-              fit: BoxFit.cover,
-              color: Colors.black.withValues(alpha: _currentScrollProgress),
-              colorBlendMode: BlendMode.srcATop,
-            ),
-            Positioned.fill(
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Scrollbar(
+    return _ProductProvider(
+      product: generateProduct(),
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification notification) {
+          _onScroll();
+          return false;
+        },
+        child: SizedBox.expand(
+          child: Stack(
+            children: [
+              Image.network(
+                'http://',
+                width: double.infinity,
+                height: ProductPageTab0.kImageHeight,
+                cacheHeight: (ProductPageTab0.kImageHeight * 3).toInt(),
+                fit: BoxFit.cover,
+                color: Colors.black.withValues(alpha: _currentScrollProgress),
+                colorBlendMode: BlendMode.srcATop,
+              ),
+              Positioned.fill(
+                child: SingleChildScrollView(
                   controller: scrollController,
-                  trackVisibility: true,
-                  child: Container(
-                    margin: const EdgeInsetsDirectional.only(
-                      top: ProductPageTab0.kImageHeight - 30.0,
+                  child: Scrollbar(
+                    controller: scrollController,
+                    trackVisibility: true,
+                    child: Container(
+                      margin: const EdgeInsetsDirectional.only(
+                        top: ProductPageTab0.kImageHeight - 30.0,
+                      ),
+                      child: const _Body(),
                     ),
-                    child: const _Body(),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -191,19 +194,21 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
+    final Product product = _ProductProvider.of(context).product;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Petits pois et carottes',
+          product.name!,
           style: textTheme.displayLarge,
         ),
         const SizedBox(
           height: 3.0,
         ),
         Text(
-          'Cassegrain',
+          product.brands?.join(',') ?? '-',
           style: textTheme.displayMedium,
         ),
         const SizedBox(
@@ -576,3 +581,25 @@ class _ProductBubble extends StatelessWidget {
 }
 
 enum _ProductBubbleValue { on, off }
+
+class _ProductProvider extends InheritedWidget {
+  const _ProductProvider({
+    super.key,
+    required this.product,
+    required super.child,
+  });
+
+  final Product product;
+
+  static _ProductProvider of(BuildContext context) {
+    final _ProductProvider? result =
+        context.dependOnInheritedWidgetOfExactType<_ProductProvider>();
+    assert(result != null, 'No _ProductProvider found in context');
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(_ProductProvider old) {
+    return product != old.product;
+  }
+}
