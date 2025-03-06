@@ -8,7 +8,7 @@ class Product {
   final List<String>? manufacturingCountries;
   final ProductNutriscore? nutriScore;
   final ProductNovaScore? novaScore;
-  final ProductEcoScore? ecoScore;
+  final ProductGreenScore? ecoScore;
   final List<String>? ingredients;
   final List<String>? traces;
   final List<String>? allergens;
@@ -16,25 +16,32 @@ class Product {
   final NutrientLevels? nutrientLevels;
   final NutritionFacts? nutritionFacts;
   final bool? ingredientsFromPalmOil;
+  final ProductAnalysis? containsPalmOil;
+  final ProductAnalysis? isVegan;
+  final ProductAnalysis? isVegetarian;
 
-  Product(
-      {required this.barcode,
-      this.name,
-      this.altName,
-      this.picture,
-      this.quantity,
-      this.brands,
-      this.manufacturingCountries,
-      this.nutriScore,
-      this.novaScore,
-      this.ecoScore,
-      this.ingredients,
-      this.traces,
-      this.allergens,
-      this.additives,
-      this.nutrientLevels,
-      this.nutritionFacts,
-      this.ingredientsFromPalmOil});
+  Product({
+    required this.barcode,
+    this.name,
+    this.altName,
+    this.picture,
+    this.quantity,
+    this.brands,
+    this.manufacturingCountries,
+    this.nutriScore,
+    this.novaScore,
+    this.ecoScore,
+    this.ingredients,
+    this.traces,
+    this.allergens,
+    this.additives,
+    this.nutrientLevels,
+    this.nutritionFacts,
+    this.ingredientsFromPalmOil,
+    this.containsPalmOil,
+    this.isVegan,
+    this.isVegetarian,
+  });
 }
 
 class NutritionFacts {
@@ -50,18 +57,19 @@ class NutritionFacts {
   final Nutriment? salt;
   final Nutriment? energy;
 
-  NutritionFacts(
-      {required this.servingSize,
-      this.calories,
-      this.fat,
-      this.saturatedFat,
-      this.carbohydrate,
-      this.sugar,
-      this.fiber,
-      this.proteins,
-      this.sodium,
-      this.salt,
-      this.energy});
+  NutritionFacts({
+    required this.servingSize,
+    this.calories,
+    this.fat,
+    this.saturatedFat,
+    this.carbohydrate,
+    this.sugar,
+    this.fiber,
+    this.proteins,
+    this.sodium,
+    this.salt,
+    this.energy,
+  });
 }
 
 class Nutriment {
@@ -69,7 +77,11 @@ class Nutriment {
   final dynamic perServing;
   final dynamic per100g;
 
-  Nutriment({required this.unit, this.perServing, this.per100g});
+  Nutriment({
+    required this.unit,
+    this.perServing,
+    this.per100g,
+  });
 }
 
 class NutrientLevels {
@@ -78,14 +90,21 @@ class NutrientLevels {
   final String? sugars;
   final String? fat;
 
-  NutrientLevels({this.salt, this.saturatedFat, this.sugars, this.fat});
+  NutrientLevels({
+    this.salt,
+    this.saturatedFat,
+    this.sugars,
+    this.fat,
+  });
 }
 
-enum ProductNutriscore { A, B, C, D, E }
+enum ProductNutriscore { A, B, C, D, E, unknown }
 
-enum ProductNovaScore { Group1, Group2, Group3, Group4 }
+enum ProductNovaScore { group1, group2, group3, group4, unknown }
 
-enum ProductEcoScore { A, B, C, D, E }
+enum ProductGreenScore { A, Aplus, B, C, D, E, F, unknown }
+
+enum ProductAnalysis { yes, no, maybe }
 
 Product generateProduct() => Product(
       barcode: '1234567890',
@@ -97,8 +116,8 @@ Product generateProduct() => Product(
       brands: ['Brand 1', 'Brand 2'],
       manufacturingCountries: ['Country 1', 'Country 2'],
       nutriScore: ProductNutriscore.B,
-      novaScore: ProductNovaScore.Group4,
-      ecoScore: ProductEcoScore.D,
+      novaScore: ProductNovaScore.group4,
+      ecoScore: ProductGreenScore.D,
       ingredients: ['Ingredient 1', 'Ingredient 2'],
       traces: ['Trace 1', 'Trace 2'],
       allergens: ['Allergen 1', 'Allergen 2'],

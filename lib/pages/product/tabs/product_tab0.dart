@@ -1,5 +1,5 @@
 import 'package:esilv_dart/model/product.dart';
-import 'package:esilv_dart/pages/demo_bloc.dart';
+import 'package:esilv_dart/pages/product/product_details_bloc.dart';
 import 'package:esilv_dart/res/app_colors.dart';
 import 'package:esilv_dart/res/app_icons.dart';
 import 'package:flutter/material.dart';
@@ -241,62 +241,77 @@ class _Scores extends StatelessWidget {
     return Container(
       color: AppColors.gray1,
       width: double.infinity,
-      child: Column(children: [
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-            vertical: _verticalPadding,
-            horizontal: _horizontalPadding,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 44,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsetsDirectional.only(end: 5.0),
-                    child: _Nutriscore(
-                      nutriscore: ProductNutriscore.A,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(
+              vertical: _verticalPadding,
+              horizontal: _horizontalPadding,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 44,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.only(end: 5.0),
+                      child: BlocBuilder<ProductBloc, ProductBlocState>(
+                        builder: (_, ProductBlocState state) {
+                          return _Nutriscore(
+                            nutriscore: state.product!.nutriScore ??
+                                ProductNutriscore.unknown,
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Container(
-                width: 1.0,
-                height: 100.0,
-                color: Theme.of(context).dividerColor,
-              ),
-              Expanded(
-                flex: 66,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                      start: 25.0,
-                    ),
-                    child: _NovaGroup(
-                      novaScore: ProductNovaScore.Group1,
+                VerticalDivider(
+                  width: 1.0,
+                  color: Theme.of(context).dividerColor,
+                ),
+                Expanded(
+                  flex: 66,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                        start: 25.0,
+                      ),
+                      child: BlocBuilder<ProductBloc, ProductBlocState>(
+                          builder: (_, ProductBlocState state) {
+                        return _NovaGroup(
+                          novaScore: state.product!.novaScore ??
+                              ProductNovaScore.unknown,
+                        );
+                      }),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        const Divider(
-          height: 1.0,
-        ),
-        Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
-            vertical: _verticalPadding,
-            horizontal: _horizontalPadding,
+          const Divider(
+            height: 1.0,
           ),
-          child: _EcoScore(
-            ecoScore: ProductEcoScore.A,
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(
+              vertical: _verticalPadding,
+              horizontal: _horizontalPadding,
+            ),
+            child: BlocBuilder<ProductBloc, ProductBlocState>(
+              builder: (_, ProductBlocState state) {
+                return _EcoScore(
+                  ecoScore:
+                      state.product?.ecoScore ?? ProductGreenScore.unknown,
+                );
+              },
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }
@@ -336,6 +351,7 @@ class _Nutriscore extends StatelessWidget {
       ProductNutriscore.C => 'res/drawables/nutriscore_c.png',
       ProductNutriscore.D => 'res/drawables/nutriscore_d.png',
       ProductNutriscore.E => 'res/drawables/nutriscore_e.png',
+      ProductNutriscore.unknown => 'TODO',
     };
   }
 }
@@ -374,18 +390,19 @@ class _NovaGroup extends StatelessWidget {
 
   String _findLabel() {
     return switch (novaScore) {
-      ProductNovaScore.Group1 =>
+      ProductNovaScore.group1 =>
         'Aliments non transformés ou transformés minimalement',
-      ProductNovaScore.Group2 => 'Ingrédients culinaires transformés',
-      ProductNovaScore.Group3 => 'Aliments transformés',
-      ProductNovaScore.Group4 =>
+      ProductNovaScore.group2 => 'Ingrédients culinaires transformés',
+      ProductNovaScore.group3 => 'Aliments transformés',
+      ProductNovaScore.group4 =>
         'Produits alimentaires et boissons ultra-transformés',
+      ProductNovaScore.unknown => 'Score non calculé',
     };
   }
 }
 
 class _EcoScore extends StatelessWidget {
-  final ProductEcoScore ecoScore;
+  final ProductGreenScore ecoScore;
 
   const _EcoScore({
     required this.ecoScore,
@@ -429,31 +446,42 @@ class _EcoScore extends StatelessWidget {
 
   IconData _findIcon() {
     return switch (ecoScore) {
-      ProductEcoScore.A => AppIcons.ecoscore_a,
-      ProductEcoScore.B => AppIcons.ecoscore_b,
-      ProductEcoScore.C => AppIcons.ecoscore_c,
-      ProductEcoScore.D => AppIcons.ecoscore_d,
-      ProductEcoScore.E => AppIcons.ecoscore_e,
+      ProductGreenScore.Aplus => AppIcons.ecoscore_a_plus,
+      ProductGreenScore.A => AppIcons.ecoscore_a,
+      ProductGreenScore.B => AppIcons.ecoscore_b,
+      ProductGreenScore.C => AppIcons.ecoscore_c,
+      ProductGreenScore.D => AppIcons.ecoscore_d,
+      ProductGreenScore.E => AppIcons.ecoscore_e,
+      ProductGreenScore.F => AppIcons.ecoscore_f,
+      // TODO
+      ProductGreenScore.unknown => AppIcons.ecoscore_e,
     };
   }
 
   Color _findIconColor() {
     return switch (ecoScore) {
-      ProductEcoScore.A => AppColors.ecoScoreA,
-      ProductEcoScore.B => AppColors.ecoScoreB,
-      ProductEcoScore.C => AppColors.ecoScoreC,
-      ProductEcoScore.D => AppColors.ecoScoreD,
-      ProductEcoScore.E => AppColors.ecoScoreE,
+      ProductGreenScore.Aplus => AppColors.greenScoreAPlus,
+      ProductGreenScore.A => AppColors.greenScoreA,
+      ProductGreenScore.B => AppColors.greenScoreB,
+      ProductGreenScore.C => AppColors.greenScoreC,
+      ProductGreenScore.D => AppColors.greenScoreD,
+      ProductGreenScore.E => AppColors.greenScoreE,
+      ProductGreenScore.F => AppColors.greenScoreF,
+      // TODO
+      ProductGreenScore.unknown => Colors.transparent,
     };
   }
 
   String _findLabel() {
     return switch (ecoScore) {
-      ProductEcoScore.A => 'Très faible impact environnemental',
-      ProductEcoScore.B => 'Faible impact environnemental',
-      ProductEcoScore.C => 'Impact modéré sur l\'environnement',
-      ProductEcoScore.D => 'Impact environnemental élevé',
-      ProductEcoScore.E => 'Impact environnemental très élevé',
+      ProductGreenScore.Aplus => 'Très faible impact environnemental',
+      ProductGreenScore.A => 'Très faible impact environnemental',
+      ProductGreenScore.B => 'Faible impact environnemental',
+      ProductGreenScore.C => 'Impact modéré sur l\'environnement',
+      ProductGreenScore.D => 'Impact environnemental élevé',
+      ProductGreenScore.E => 'Impact environnemental très élevé',
+      ProductGreenScore.F => 'Impact environnemental très élevé',
+      ProductGreenScore.unknown => 'Score non calculé',
     };
   }
 }
@@ -466,14 +494,22 @@ class _Info extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _ProductItemValue(
-          label: 'Quantité',
-          value: '200g',
+        BlocBuilder<ProductBloc, ProductBlocState>(
+          builder: (_, ProductBlocState state) {
+            return _ProductItemValue(
+              label: 'Quantité',
+              value: state.product?.quantity ?? 'Indisponible',
+            );
+          },
         ),
-        _ProductItemValue(
-          label: 'Vendu',
-          value: 'France',
-          includeDivider: false,
+        BlocBuilder<ProductBloc, ProductBlocState>(
+          builder: (_, ProductBlocState state) {
+            return _ProductItemValue(
+              label: 'Vendu en',
+              value: state.product!.manufacturingCountries?.join(', ') ?? '-',
+              includeDivider: false,
+            );
+          },
         ),
         const SizedBox(
           height: 15.0,
@@ -592,25 +628,3 @@ class _ProductBubble extends StatelessWidget {
 }
 
 enum _ProductBubbleValue { on, off }
-
-class _ProductProvider extends InheritedWidget {
-  const _ProductProvider({
-    super.key,
-    required this.product,
-    required super.child,
-  });
-
-  final Product? product;
-
-  static _ProductProvider of(BuildContext context) {
-    final _ProductProvider? result =
-        context.dependOnInheritedWidgetOfExactType<_ProductProvider>();
-    assert(result != null, 'No _ProductProvider found in context');
-    return result!;
-  }
-
-  @override
-  bool updateShouldNotify(_ProductProvider old) {
-    return product != old.product;
-  }
-}

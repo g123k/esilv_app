@@ -1,16 +1,17 @@
-// Events
 import 'package:esilv_dart/model/product.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// Events
 abstract class ProductBlocEvent {}
 
 class _LoadProductEvent extends ProductBlocEvent {}
 
 // Bloc
 class ProductBloc extends Bloc<ProductBlocEvent, ProductBlocState> {
-  /// Valeur initiale
+  // super = Valeur initiale
   ProductBloc() : super(ProductBlocState.init()) {
     on<_LoadProductEvent>(_loadProduct);
+    // Dès que le BLoC est inséré, on veut faire la requête
     add(_LoadProductEvent());
   }
 
