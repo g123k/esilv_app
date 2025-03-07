@@ -303,8 +303,8 @@ class _Scores extends StatelessWidget {
             ),
             child: BlocBuilder<ProductBloc, ProductBlocState>(
               builder: (_, ProductBlocState state) {
-                return _EcoScore(
-                  ecoScore:
+                return _GreenScore(
+                  greenScore:
                       state.product?.ecoScore ?? ProductGreenScore.unknown,
                 );
               },
@@ -401,11 +401,11 @@ class _NovaGroup extends StatelessWidget {
   }
 }
 
-class _EcoScore extends StatelessWidget {
-  final ProductGreenScore ecoScore;
+class _GreenScore extends StatelessWidget {
+  final ProductGreenScore greenScore;
 
-  const _EcoScore({
-    required this.ecoScore,
+  const _GreenScore({
+    required this.greenScore,
   });
 
   @override
@@ -415,7 +415,7 @@ class _EcoScore extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'EcoScore',
+          'Green-Score',
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(
@@ -445,7 +445,7 @@ class _EcoScore extends StatelessWidget {
   }
 
   IconData _findIcon() {
-    return switch (ecoScore) {
+    return switch (greenScore) {
       ProductGreenScore.Aplus => AppIcons.ecoscore_a_plus,
       ProductGreenScore.A => AppIcons.ecoscore_a,
       ProductGreenScore.B => AppIcons.ecoscore_b,
@@ -459,7 +459,7 @@ class _EcoScore extends StatelessWidget {
   }
 
   Color _findIconColor() {
-    return switch (ecoScore) {
+    return switch (greenScore) {
       ProductGreenScore.Aplus => AppColors.greenScoreAPlus,
       ProductGreenScore.A => AppColors.greenScoreA,
       ProductGreenScore.B => AppColors.greenScoreB,
@@ -473,7 +473,7 @@ class _EcoScore extends StatelessWidget {
   }
 
   String _findLabel() {
-    return switch (ecoScore) {
+    return switch (greenScore) {
       ProductGreenScore.Aplus => 'Très faible impact environnemental',
       ProductGreenScore.A => 'Très faible impact environnemental',
       ProductGreenScore.B => 'Faible impact environnemental',
