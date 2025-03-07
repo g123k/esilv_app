@@ -1,3 +1,4 @@
+import 'package:esilv_dart/api/openfoodfacts_api.dart';
 import 'package:esilv_dart/model/product.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,8 +20,8 @@ class ProductBloc extends Bloc<ProductBlocEvent, ProductBlocState> {
     ProductBlocEvent event,
     Emitter<ProductBlocState> emit,
   ) async {
-    await Future.delayed(Duration(seconds: 2));
-    emit(ProductBlocState(generateProduct()));
+    var product = await OpenFoodFactsAPIManager().loadProduct('5000159484695');
+    emit(ProductBlocState(product.response.toProduct()));
   }
 }
 
